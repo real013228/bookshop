@@ -1,0 +1,11 @@
+.logo {
+    width: 120px;
+    display: inline-block;
+    grid-area: "logo";
+}
+
+.logo__image {
+    border-radius: 100%;
+    width: 120px;
+    cursor: pointer;
+}

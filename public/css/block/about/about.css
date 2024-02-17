@@ -1,0 +1,18 @@
+.about {
+    grid-area: about;
+}
+.about__inner {
+    height: 300px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: 
+    "title text";
+    align-items: center;
+}
+
+.text {
+    display: inline-block;
+    text-align: center;
+    grid-area: text;
+}
+

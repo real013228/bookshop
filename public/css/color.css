@@ -1,0 +1,11 @@
+:root {
+    --body-text-color: rgb(255, 255, 255);
+    --header-menu-color: rgb(255, 255, 255);
+    --header-content-color: rgb(255, 255, 255);
+    --border-color: rgb(255, 255, 255);
+    --search-form-bar-color: rgba(255, 255, 255, 0.2);
+    --search-form-bar-button-color: rgba(255, 255, 255, 0.1);
+    --footer-background-color: #111;
+    --footer-icon-bg-color: rgb(255, 255, 255);
+    --footer-icon-color: rgb(0, 0, 0);
+}

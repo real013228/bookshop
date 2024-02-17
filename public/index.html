@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bookshop</title>
+        <link rel="stylesheet" href="./style.css"/>
+        <meta charset="utf-8" />
+        <meta name="keywords" content="book, shop, purchase"/>
+        <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="js/library.js"></script>
+        <script src="js/loginform.js"></script>
+        <script src="js/highlight.js"></script>
+    </head>
+    
+    <body class="body">
+        <header class="header">
+                <div class="header__top">
+                    <div class="container">
+                        <div class="header__top-inner">
+                            <div class="logo">
+                                <a class="logo__link" href="#">
+                                    <img class="logo__image" src="img/logo.png" alt="cat logo">
+                                </a>
+                            </div>
+                            
+                            <nav class="menu">
+                                <ul class="menu__list">
+                                    <li class="menu__list-item">
+                                        <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Home</a>
+                                    </li>
+                                    <li class="menu__list-item">
+                                        <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">More</a>
+                                    </li>
+                                    <li class="menu__list-item">
+                                        <a class="menu__link" href="./pages/fetch.html" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Contacts</a>
+                                    </li>
+                                    <li class="menu__list-item">
+                                        <a class="menu__link" href="./pages/loginform.html" onclick="showRegistrationForm()" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Log in</a>
+                                    </li>
+                                    <li class="menu__list-item">
+                                        <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Subscribe</a>
+                                    </li>
+                                    <li class="menu__list-item">
+                                        <a class="menu__link" href="./pages/webform.html" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">TODO</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div> 
+                    </div>
+                </div>
+                <div class="header__content">
+                    <div class="container">
+                        <div class="header__content-inner">
+                            <h1 class="title"> <!--fix to block-->
+                                BOOK-WEBSHOP
+                            </h1>
+                            <p class="header__content-description">
+                                Purchase every book you want
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        </header>
+        
+        <section class="about">
+            <div class="container">
+                <div class="about__inner">
+                    <div class="title">
+                        <h2>
+                            About us
+                        </h1>
+                    </div>
+                    <div class="text">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur aliquam ab totam fugiat repellat, laudantium fuga deleniti quam aliquid ad tempora dolore? Quia saepe eveniet quaerat sed pariatur, nesciunt placeat voluptates excepturi?
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="search-form">
+            <div class="container">
+                <div class="search-form__inner">
+                    <div class="logo">
+                        <a class="logo__link" href="#">
+                            <img class="logo__image" src="img/logo.png" alt="cat logo">
+                        </a>
+                    </div>
+                    
+                    <form class="search-form__bar" onsubmit="event.preventDefault(); searchBooks();">
+                        <input id="searchInput" class="search-form__input" placeholder="Type the book">
+                        <button class="search-form__button" type="submit" onclick="searchBooks()">
+                            <img class="search-form__button-img" src="img/search.png">
+                        </button>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer__content">
+                <div class="container">
+                    <!-- <div class="logo logo--line">
+                        <a class="logo__link" href="#">
+                            <img class="logo__image" src="img/logo.png" alt="cat logo">
+                        </a>
+                    </div> -->
+                    <div class="footer__social">
+                        <a class="footer__social-link" href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a class="footer__social-link" href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a class="footer__social-link" href="#"><i class="fa-brands fa-telegram"></i></a>
+                        <a class="footer__social-link" href="#"><i class="fa-brands fa-vk"></i></a>
+                        <a class="footer__social-link" href="#"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__copy">
+                ©All rights reserved
+            </div>
+        </footer>
+    </body>
+</html>

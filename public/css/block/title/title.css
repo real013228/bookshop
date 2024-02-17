@@ -1,0 +1,8 @@
+.title {
+    width: 100%;
+    font-size: 50px;
+    font-weight: 900;
+    text-decoration: underline;
+    text-align: center;
+    grid-area: title;
+}

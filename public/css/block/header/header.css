@@ -1,0 +1,41 @@
+.header__top-inner {
+    display: grid;
+    grid-template-areas: 
+    "logo menu";
+    grid-template-columns: 1fr 4fr;
+    padding-top: 10px;
+    padding-bottom: 100px;
+}
+
+
+.header__content {
+    height: 800px;
+}
+
+.header__content-inner {
+    color: var(--header-content-color);
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-areas: 
+    "title"
+    "description";
+}
+
+.header__content-description {
+    text-align: center;
+    font-weight: 700;
+    font-size: 30px;
+    width: 100%;
+    grid-area: description;
+}
+
+.row {
+    width: 100%;
+}
+
+.header {
+    grid-area: header;
+}
