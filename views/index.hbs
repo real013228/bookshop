@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>App</title>
-  </head>
-  <body>
-    {{ message }}
-  </body>
+<html lang="en">
+    <head>
+        <title>Bookshop</title>
+        <link rel="stylesheet" href="./style.css"/>
+        <meta charset="utf-8" />
+        <meta name="keywords" content="book, shop, purchase"/>
+        <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="js/library.js"></script>
+        <script src="js/loginform.js"></script>
+        <script src="js/highlight.js"></script>
+    </head>
+    
+    <body class="body">
+        {{#if message}}
+            {{> main/header}}
+        {{/if}}
+        {{> main/about}}
+        {{> main/searchform}}
+        {{> main/footer}}
+    </body>
 </html>

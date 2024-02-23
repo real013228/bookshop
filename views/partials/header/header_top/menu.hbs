@@ -1,0 +1,28 @@
+<nav class="menu">
+    <ul class="menu__list">
+        <li class="menu__list-item">
+            <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Home</a>
+        </li>
+        <li class="menu__list-item">
+            <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">More</a>
+        </li>
+        <li class="menu__list-item">
+            <a class="menu__link" href="fetch.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Contacts</a>
+        </li>
+        {{#unless logged}}
+            <li class="menu__list-item">
+                <a class="menu__link" href="loginform.hbs" onclick="showRegistrationForm()" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Log in</a>
+            </li>
+        {{else}} 
+            <li class="menu__list-item">
+                <a class="menu__link" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">{{accountName}}</a>
+            </li>
+        {{/unless}}
+        <li class="menu__list-item">
+            <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Subscribe</a>
+        </li>
+        <li class="menu__list-item">
+            <a class="menu__link" href="webform.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">TODO</a>
+        </li>
+    </ul>
+</nav>

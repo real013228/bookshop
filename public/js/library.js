@@ -33,5 +33,5 @@ function searchBooks() {
 
     localStorage.setItem('searchTerm', searchTerm);
 
-    window.location.href = 'pages/results.html';
+    window.location.href = 'results.hbs';
 }

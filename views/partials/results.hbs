@@ -20,6 +20,8 @@
         const filteredBooks = filterBooksByTitle(titles, searchTerm);
         renderBooks(filteredBooks);
     </script>
-
+    <footer>
+        <p class="footer__page-loadtime">Время загрузки страницы: {{responseTime}} мс + </p>
+    </footer>
 </body>
 </html>
