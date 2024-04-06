@@ -8,33 +8,33 @@ export class AppController {
   @Get()
   @Render('index')
   root() {
-    return { 
+    return {
       message: true,
-      logged:true,
-      accountName:"Alice",
+      logged: true,
+      accountName: 'Alice',
     };
   }
   @Get('fetch.hbs')
   @Render('partials/fetch.hbs')
-  getFetch(){
-    return
+  getFetch() {
+    return;
   }
 
   @Get('loginform.hbs')
   @Render('partials/loginform.hbs')
-  getLoginform(){
-    return
+  getLoginform() {
+    return;
   }
-  
+
   @Get('results.hbs')
   @Render('partials/results.hbs')
-  getResults(){
-    return 
+  getResults() {
+    return;
   }
-  
+
   @Get('webform.hbs')
   @Render('partials/webform.hbs')
-  getWebform(){
-    return
+  getWebform() {
+    return;
   }
 }
