@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import UserEntity from './entities/user.entity';
 import GenreEntity from './entities/genre.entity';
-import AuthorEntity from './entities/author.entity';
+import AuthorEntity from './author/author.entity';
 import BookEntity from './entities/book.entity';
 import OrderEntity from './entities/order.entity';
 
