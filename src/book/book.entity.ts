@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import Genre from './genre.entity.js';
+import Genre from '../genre/genre.entity';
 import Author from '../author/author.entity';
 
 @Entity()

@@ -6,8 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import Book from './book.entity.js';
-import User from './user.entity';
+import Book from '../book/book.entity';
+import User from '../user/user.entity';
 
 @Entity()
 class Order {
