@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import Book from './book.entity';
+import Book from '../book/book.entity';
 
 @Entity()
 class Author {
@@ -13,7 +13,7 @@ class Author {
   public secondName: string;
 
   @OneToMany(() => Book, (book: Book) => book.author)
-  public books: Book[];
+  public books?: Book[];
 }
 
 export default Author;

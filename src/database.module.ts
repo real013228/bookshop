@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import UserEntity from './entities/user.entity';
-import GenreEntity from './entities/genre.entity';
-import AuthorEntity from './entities/author.entity';
-import BookEntity from './entities/book.entity';
-import OrderEntity from './entities/order.entity';
+import UserEntity from './user/user.entity';
+import GenreEntity from './genre/genre.entity';
+import AuthorEntity from './author/author.entity';
+import BookEntity from './book/book.entity';
+import OrderEntity from './order/order.entity';
 
 @Module({
   imports: [
