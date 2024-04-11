@@ -16,7 +16,7 @@ export class BookService {
   }
 
   getBookByID(id: number) {
-    const book = this.books.find(book => book.id === id);
+    const book = this.books.find((book) => book.id === id);
     if (book) {
       return book;
     }
@@ -24,7 +24,7 @@ export class BookService {
   }
 
   updateBook(id: number, book: updateBookDto) {
-    console.log("replace book")
+    console.log('replace book', id, book.author);
     throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
   }
 
@@ -36,14 +36,14 @@ export class BookService {
       author: book.author,
       price: book.price,
       genres: book.genres,
-    }
-    this.lastBookID++
+    };
+    this.lastBookID++;
     this.books.push(newBook);
     return newBook;
   }
 
   deleteBook(id: number) {
-    const bookIndex = this.books.findIndex(book => book.id === id);
+    const bookIndex = this.books.findIndex((book) => book.id === id);
     if (bookIndex > -1) {
       this.books.splice(bookIndex, 1);
     } else {
