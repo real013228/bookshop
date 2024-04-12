@@ -7,39 +7,97 @@ import {
   Delete,
   Body,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+} from '@nestjs/swagger';
 import { GenreService } from './genre.service';
-import { ApiTags } from '@nestjs/swagger';
 import { createGenreDto } from './dto/create-genre.dto';
 import { updateGenreDto } from './dto/update-genre.dto';
+import Genre from './genre.entity';
 
-@Controller()
+@Controller('genre')
 @ApiTags('Genre')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
-  @Get('/genre/hello')
+
+  @Get('/hello')
+  @ApiOperation({ summary: 'Get hello message from Genre Service' })
+  @ApiResponse({ status: 200, description: 'Hello message received' })
   getHello() {
     return this.genreService.getHello();
   }
-  @Get('/genre')
+
+  @Get()
+  @ApiOperation({ summary: 'Retrieve all genres' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all genres',
+    type: [Genre],
+  })
   getAllGenres() {
     return this.genreService.getAllGenres();
   }
-  @Get('/genre/:id')
+
+  @Get('/:id')
+  @ApiOperation({ summary: 'Retrieve a genre by ID' })
+  @ApiResponse({ status: 200, description: 'Genre details', type: Genre })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID of the genre to retrieve',
+    type: 'integer',
+  })
   getGenreByID(@Param('id') id: string) {
     return this.genreService.getGenreByID(Number(id));
   }
-  @Post('/genre')
+
+  @Post()
+  @ApiOperation({ summary: 'Create a new genre' })
+  @ApiBody({ type: createGenreDto, description: 'Data to create a new genre' })
+  @ApiResponse({
+    status: 201,
+    description: 'Genre created successfully',
+    type: Genre,
+  })
   async createGenre(@Body() post: createGenreDto) {
     return this.genreService.createGenre(post);
   }
 
-  @Put('/genre/:id')
+  @Put('/:id')
+  @ApiOperation({ summary: 'Update an existing genre' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID of the genre to be updated',
+    type: 'integer',
+  })
+  @ApiBody({
+    type: updateGenreDto,
+    description: 'Data to update an existing genre',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Genre updated successfully',
+    type: Genre,
+  })
   async updateGenre(@Body() post: updateGenreDto, @Param('id') id: string) {
     return this.genreService.updateGenre(Number(id), post);
   }
 
-  @Delete('/genre/:id')
+  @Delete('/:id')
+  @ApiOperation({ summary: 'Delete a genre' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID of the genre to delete',
+    type: 'integer',
+  })
+  @ApiResponse({ status: 204, description: 'Genre deleted successfully' })
   async deleteGenre(@Param('id') id: string) {
-    this.genreService.deleteGenre(Number(id));
+    return this.genreService.deleteGenre(Number(id));
   }
 }
