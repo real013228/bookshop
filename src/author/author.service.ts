@@ -1,49 +1,61 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { updateAuthorDto } from './dto/update-author.dto';
 import { createAuthorDto } from './dto/create-author.dto';
-import AuthorEntity from './author.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import Author from './author.entity';
 
 @Injectable()
 export class AuthorService {
   getHello(): string {
     return 'Hello World!';
   }
-  private lastAuthorID = 0;
-  private authors: AuthorEntity[] = [];
+  constructor(
+    @InjectRepository(Author)
+    private authorsRepository: Repository<Author>,
+  ) {}
 
   getAllAuthors() {
-    return this.authors;
+    return this.authorsRepository.find();
   }
 
-  getAuthorByID(id: number) {
-    const author = this.authors.find((author) => author.id === id);
+  async getAuthorByID(id: number) {
+    const author = await this.authorsRepository.findOne({ where: { id: id } });
     if (author) {
       return author;
     }
     throw new HttpException('Author not found', HttpStatus.NOT_FOUND);
   }
 
-  updateAuthor(id: number, author: updateAuthorDto) {
-    console.log('replace author', id, author.firstName);
-    throw new HttpException('Author not found', HttpStatus.NOT_FOUND);
+  async updateAuthor(id: number, authorDto: updateAuthorDto) {
+    const author = await this.authorsRepository.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+    if (!author) {
+      throw new HttpException('Author not found', HttpStatus.NOT_FOUND);
+    }
+
+    author.firstName = authorDto.firstName || author.firstName;
+    author.secondName = authorDto.secondName || author.secondName;
+
+    await this.authorsRepository.save(author); // Save changes in the transaction
+
+    return this.authorsRepository.findOne({
+      where: { id },
+      relations: ['books'],
+    });
   }
 
-  createAuthor(author: createAuthorDto) {
-    const newAuthor = {
-      id: this.lastAuthorID,
-      firstName: author.firstName,
-      secondName: author.secondName,
-    };
-    this.lastAuthorID++;
-    this.authors.push(newAuthor);
+  async createAuthor(author: createAuthorDto) {
+    const newAuthor = this.authorsRepository.create(author);
+    await this.authorsRepository.save(newAuthor);
     return newAuthor;
   }
 
-  deleteAuthor(id: number) {
-    const authorIndex = this.authors.findIndex((author) => author.id === id);
-    if (authorIndex > -1) {
-      this.authors.splice(authorIndex, 1);
-    } else {
+  async deleteAuthor(id: number) {
+    const deleteResponse = await this.authorsRepository.delete(id);
+    if (!deleteResponse.affected) {
       throw new HttpException('Author not found', HttpStatus.NOT_FOUND);
     }
   }
