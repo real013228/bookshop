@@ -12,7 +12,10 @@ class Author {
   @Column()
   public secondName: string;
 
-  @OneToMany(() => Book, (book: Book) => book.author)
+  @OneToMany(() => Book, (book: Book) => book.author, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   public books?: Book[];
 }
 

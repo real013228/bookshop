@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -20,11 +21,17 @@ class Book {
   @Column()
   public description: string;
 
-  @ManyToOne(() => Author, (author: Author) => author.books)
+  @ManyToOne(() => Author, (author: Author) => author.books, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'authorId' })
   public author: Author;
 
   @Column()
   public price: number;
+
+  @Column()
+  public authorId: number;
 
   @ManyToMany(() => Genre)
   @JoinTable()

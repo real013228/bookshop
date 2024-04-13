@@ -1,16 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import Author from '../../author/author.entity';
-import Genre from '../../genre/genre.entity';
 
 export class createBookDto {
   @ApiProperty()
   public title: string;
   @ApiProperty()
-  public description: string;
+  public description?: string;
   @ApiProperty()
-  public author: Author;
+  public authorID: number;
   @ApiProperty()
   public price: number;
   @ApiProperty()
-  public genres: Genre[];
+  public genresID?: number[];
 }
