@@ -6,14 +6,11 @@ import { In, Repository } from 'typeorm';
 import Order from './order.entity';
 import Book from '../book/book.entity';
 import User from '../user/user.entity';
-import {plainToClass} from "class-transformer";
-import {orderDto} from "./dto/order.dto";
+import { plainToClass } from 'class-transformer';
+import { orderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
-  getHello(): string {
-    return 'Hello World!';
-  }
   constructor(
     @InjectRepository(Order)
     private ordersRepository: Repository<Order>,
@@ -23,12 +20,18 @@ export class OrderService {
     private usersRepository: Repository<User>,
   ) {}
 
-  getAllOrders() {
-    return this.ordersRepository.find();
+  async getAllOrders() {
+    const orders = await this.ordersRepository.find({
+      relations: ['user', 'books'],
+    });
+    return orders.map((order) => plainToClass(orderDto, order));
   }
 
   async getOrderByID(id: number) {
-    const order = await this.ordersRepository.findOne({ where: { id: id } });
+    const order = await this.ordersRepository.findOne({
+      where: { id },
+      relations: ['user', 'books'],
+    });
     if (order) {
       return plainToClass(orderDto, order);
     }
@@ -59,10 +62,9 @@ export class OrderService {
     }
 
     const order = new Order();
-    const totalPrice = books.reduce((sum, book) => sum + book.price, 0);
     order.user = user;
     order.books = books;
-    order.totalPrice = totalPrice;
+    order.totalPrice = books.reduce((sum, book) => sum + book.price, 0);
     await this.ordersRepository.save(order);
     return plainToClass(orderDto, order);
   }
@@ -70,7 +72,7 @@ export class OrderService {
   async updateOrder(orderId: number, orderDTO: updateOrderDto) {
     const order = await this.ordersRepository.findOne({
       where: { id: orderId },
-      relations: ['books'],
+      relations: ['user', 'books'],
     });
     if (!order) {
       throw new HttpException('Order not found', HttpStatus.NOT_FOUND);
@@ -99,7 +101,7 @@ export class OrderService {
   async deleteOrder(id: number) {
     const deleteResponse = await this.ordersRepository.delete(id);
     if (!deleteResponse.affected) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Order not found', HttpStatus.NOT_FOUND);
     }
   }
 }

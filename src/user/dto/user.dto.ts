@@ -12,6 +12,6 @@ export class userDto {
   public name: string;
 
   @ApiProperty({ description: "List of user's orders" })
-  @Transform(({ obj }) => obj.books.map((order) => order.id))
+  @Transform(({ obj }) => obj.orders.map((order) => order.id))
   public orders: number[];
 }

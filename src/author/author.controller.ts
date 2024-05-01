@@ -18,25 +18,19 @@ import {
 import { createAuthorDto } from './dto/create-author.dto';
 import { updateAuthorDto } from './dto/update-author.dto';
 import Author from './author.entity';
+import {authorDto} from "./dto/author.dto";
 
 @ApiTags('Author')
 @Controller('author')
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
-  @Get('hello')
-  @ApiOperation({ summary: 'Get hello message from Author Service' })
-  @ApiResponse({ status: 200, description: 'Hello message received' })
-  getHello() {
-    return this.authorService.getHello();
-  }
-
   @Get()
   @ApiOperation({ summary: 'Retrieve all authors' })
   @ApiResponse({
     status: 200,
     description: 'List of all authors',
-    type: [Author],
+    type: [authorDto],
   })
   getAllAuthors() {
     return this.authorService.getAllAuthors();
@@ -47,7 +41,7 @@ export class AuthorController {
   @ApiResponse({
     status: 200,
     description: 'Author details',
-    type: Author,
+    type: authorDto,
   })
   @ApiParam({
     name: 'id',
@@ -68,7 +62,7 @@ export class AuthorController {
   @ApiResponse({
     status: 201,
     description: 'Author created successfully',
-    type: Author,
+    type: authorDto,
   })
   async createAuthor(@Body() post: createAuthorDto) {
     return this.authorService.createAuthor(post);
@@ -89,7 +83,7 @@ export class AuthorController {
   @ApiResponse({
     status: 200,
     description: 'Author updated successfully',
-    type: Author,
+    type: authorDto,
   })
   async updateAuthor(@Body() post: updateAuthorDto, @Param('id') id: string) {
     return this.authorService.updateAuthor(Number(id), post);

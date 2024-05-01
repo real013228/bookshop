@@ -13,13 +13,4 @@ export class updateOrderDto {
   @ArrayNotEmpty()
   @IsNumber({}, { each: true })
   public bookIds?: number[];
-
-  @ApiPropertyOptional({
-    description: 'Updated total price of the order in USD',
-    example: 49.99,
-    required: false,
-  })
-  @IsOptional()
-  @IsNumber()
-  public totalPrice?: number;
 }

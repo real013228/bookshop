@@ -18,24 +18,19 @@ import {
 import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
 import UserEntity from './user.entity';
+import {userDto} from "./dto/user.dto";
 
 @Controller('User')
 @ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/user/hello')
-  @ApiOperation({ summary: 'Get Hello Message' })
-  @ApiResponse({ status: 200, description: 'Get a simple hello message' })
-  getHello() {
-    return this.userService.getHello();
-  }
 
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({
     status: 200,
     description: 'List of all users',
-    type: [UserEntity],
+    type: [userDto],
   })
   @Get('/user')
   getAllUsers() {
@@ -46,7 +41,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Fetch a single user',
-    type: UserEntity,
+    type: userDto,
   })
   @ApiParam({
     name: 'id',
@@ -63,7 +58,7 @@ export class UserController {
     type: createUserDto,
     description: 'The data needed to create a new user',
   })
-  @ApiResponse({ status: 201, description: 'User created', type: UserEntity })
+  @ApiResponse({ status: 201, description: 'User created', type: userDto })
   @Post('/user')
   async createUser(@Body() post: createUserDto) {
     return this.userService.createUser(post);
@@ -79,7 +74,7 @@ export class UserController {
     type: updateUserDto,
     description: 'The data needed to update the user',
   })
-  @ApiResponse({ status: 200, description: 'User updated', type: UserEntity })
+  @ApiResponse({ status: 200, description: 'User updated', type: userDto })
   @Put('/user/:id')
   async updateUser(@Body() post: updateUserDto, @Param('id') id: string) {
     return this.userService.updateUser(Number(id), post);

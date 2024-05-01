@@ -11,9 +11,6 @@ import { bookDto } from './dto/book.dto';
 
 @Injectable()
 export class BookService {
-  getHello(): string {
-    return 'Hello World!';
-  }
   constructor(
     @InjectRepository(Book)
     private booksRepository: Repository<Book>,
@@ -24,12 +21,17 @@ export class BookService {
   ) {}
 
   async getAllBooks() {
-    const books = await this.booksRepository.find();
+    const books = await this.booksRepository.find({
+      relations: ['author', 'genres'],
+    });
     return books.map((book) => plainToClass(bookDto, book));
   }
 
   async getBookByID(id: number) {
-    const book = await this.booksRepository.findOne({ where: { id: id } });
+    const book = await this.booksRepository.findOne({
+      where: { id },
+      relations: ['author', 'genres'],
+    });
     if (book) {
       return plainToClass(bookDto, book);
     }
@@ -39,9 +41,8 @@ export class BookService {
   async updateBook(id: number, bookDTO: updateBookDto) {
     const book = await this.booksRepository.findOne({
       where: { id },
-      relations: ['genres'],
+      relations: ['author', 'genres'],
     });
-
     if (!book) {
       throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
@@ -54,14 +55,12 @@ export class BookService {
       const genres = await this.genreRepository.findBy({
         id: In(bookDTO.genres),
       });
-
       if (genres.length !== bookDTO.genres.length) {
         throw new HttpException(
           'Some genres not found',
           HttpStatus.BAD_REQUEST,
         );
       }
-
       book.genres = genres;
     }
 
@@ -77,11 +76,9 @@ export class BookService {
       throw new HttpException('Author not found', HttpStatus.BAD_REQUEST);
     }
 
-    let genres: Genre[] = [];
+    let genres = [];
     if (bookDTO.genres && bookDTO.genres.length > 0) {
-      genres = await this.genreRepository.findBy({
-        id: In(bookDTO.genres),
-      });
+      genres = await this.genreRepository.findBy({ id: In(bookDTO.genres) });
       if (genres.length !== bookDTO.genres.length) {
         throw new HttpException(
           'One or more genres not found',
@@ -90,21 +87,22 @@ export class BookService {
       }
     }
 
-    const newBook = new Book();
-    newBook.title = bookDTO.title;
-    newBook.description = bookDTO.description ?? '';
-    newBook.author = author;
-    newBook.price = bookDTO.price;
-    newBook.genres = genres;
+    const newBook = this.booksRepository.create({
+      title: bookDTO.title,
+      description: bookDTO.description ?? '',
+      author: author,
+      price: bookDTO.price,
+      genres: genres,
+    });
 
-    await this.booksRepository.save(newBook);
-    return plainToClass(bookDto, newBook);
+    const savedBook = await this.booksRepository.save(newBook);
+    return plainToClass(bookDto, savedBook);
   }
 
   async deleteBook(id: number) {
     const deleteResponse = await this.booksRepository.delete(id);
     if (!deleteResponse.affected) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
   }
 }

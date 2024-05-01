@@ -9,40 +9,41 @@ import { userDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
-  getHello(): string {
-    return 'Hello World!';
-  }
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
 
   async getAllUsers() {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({ relations: ['orders'] });
     return users.map((user) => plainToClass(userDto, user));
   }
 
   async getUserByID(id: number) {
-    const user = await this.usersRepository.findOne({ where: { id: id } });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['orders'],
+    });
     if (user) {
       return plainToClass(userDto, user);
     }
     throw new HttpException('User not found', HttpStatus.NOT_FOUND);
   }
 
-  async updateUser(id: number, user: updateUserDto) {
-    const { affected } = await this.usersRepository.update(id, user);
-    if (affected === 0) {
+  async updateUser(id: number, userDTO: updateUserDto) {
+    const result = await this.usersRepository.update(id, userDTO);
+    if (result.affected === 0) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    return plainToClass(
-      userDto,
-      this.usersRepository.findOne({ where: { id: id } }),
-    );
+    const updatedUser = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['orders'],
+    });
+    return plainToClass(userDto, updatedUser);
   }
 
-  async createUser(user: createUserDto) {
-    const newUser = this.usersRepository.create(user);
+  async createUser(createUserDto: createUserDto) {
+    const newUser = this.usersRepository.create(createUserDto);
     await this.usersRepository.save(newUser);
     return plainToClass(userDto, newUser);
   }
@@ -50,7 +51,7 @@ export class UserService {
   async deleteUser(id: number) {
     const deleteResponse = await this.usersRepository.delete(id);
     if (!deleteResponse.affected) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
   }
 }

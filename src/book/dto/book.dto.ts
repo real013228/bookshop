@@ -29,6 +29,6 @@ export class bookDto {
     description: 'Genres associated with the book',
     isArray: true,
   })
-  @Transform(({ obj }) => obj.books.map((genre) => genre.id))
+  @Transform(({ obj }) => obj.genres.map((genre) => genre.id))
   public genres: number[];
 }

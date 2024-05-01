@@ -17,30 +17,28 @@ import {
 } from '@nestjs/swagger';
 import { createBookDto } from './dto/create-book.dto';
 import { updateBookDto } from './dto/update-book.dto';
-import Book from './book.entity';
+
+import { bookDto } from './dto/book.dto';
 
 @Controller('book')
 @ApiTags('Book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
-  @Get('hello')
-  @ApiOperation({ summary: 'Gets a hello message from the Book Service' })
-  @ApiResponse({ status: 200, description: 'Hello message received' })
-  getHello() {
-    return this.bookService.getHello();
-  }
-
   @Get()
   @ApiOperation({ summary: 'Retrieve all books' })
-  @ApiResponse({ status: 200, description: 'List of all books', type: [Book] })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all books',
+    type: [bookDto],
+  })
   getAllBooks() {
     return this.bookService.getAllBooks();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a book by ID' })
-  @ApiResponse({ status: 200, description: 'Book details', type: Book })
+  @ApiResponse({ status: 200, description: 'Book details', type: bookDto })
   @ApiParam({
     name: 'id',
     required: true,
@@ -57,7 +55,7 @@ export class BookController {
   @ApiResponse({
     status: 201,
     description: 'Book created successfully',
-    type: Book,
+    type: bookDto,
   })
   async createBook(@Body() post: createBookDto) {
     return this.bookService.createBook(post);
@@ -78,7 +76,7 @@ export class BookController {
   @ApiResponse({
     status: 200,
     description: 'Book updated successfully',
-    type: Book,
+    type: bookDto,
   })
   async updateBook(@Body() post: updateBookDto, @Param('id') id: string) {
     return this.bookService.updateBook(Number(id), post);

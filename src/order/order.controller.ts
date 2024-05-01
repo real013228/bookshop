@@ -18,25 +18,19 @@ import { OrderService } from './order.service';
 import { createOrderDto } from './dto/create-order.dto';
 import { updateOrderDto } from './dto/update-order.dto';
 import Order from './order.entity';
+import {orderDto} from "./dto/order.dto";
 
 @ApiTags('Order')
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Get('/hello')
-  @ApiOperation({ summary: 'Get hello message from Order Service' })
-  @ApiResponse({ status: 200, description: 'Hello message received' })
-  getHello() {
-    return this.orderService.getHello();
-  }
-
   @Get()
   @ApiOperation({ summary: 'Retrieve all orders' })
   @ApiResponse({
     status: 200,
     description: 'List of all orders',
-    type: [Order],
+    type: [orderDto],
   })
   getAllOrders() {
     return this.orderService.getAllOrders();
@@ -44,7 +38,7 @@ export class OrderController {
 
   @Get('/:id')
   @ApiOperation({ summary: 'Retrieve an order by ID' })
-  @ApiResponse({ status: 200, description: 'Order details', type: Order })
+  @ApiResponse({ status: 200, description: 'Order details', type: orderDto })
   @ApiParam({
     name: 'id',
     required: true,
@@ -64,7 +58,7 @@ export class OrderController {
   @ApiResponse({
     status: 201,
     description: 'Order created successfully',
-    type: Order,
+    type: orderDto,
   })
   async createOrder(@Body() post: createOrderDto) {
     return this.orderService.createOrder(post);
@@ -85,7 +79,7 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'Order updated successfully',
-    type: Order,
+    type: orderDto,
   })
   async updateOrder(@Body() post: updateOrderDto, @Param('id') id: string) {
     return this.orderService.updateOrder(Number(id), post);

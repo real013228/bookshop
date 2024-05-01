@@ -9,21 +9,21 @@ import { authorDto } from './dto/author.dto';
 
 @Injectable()
 export class AuthorService {
-  getHello(): string {
-    return 'Hello World!';
-  }
   constructor(
-    @InjectRepository(Author)
-    private authorsRepository: Repository<Author>,
+      @InjectRepository(Author)
+      private authorsRepository: Repository<Author>,
   ) {}
 
   async getAllAuthors() {
-    const authors = await this.authorsRepository.find();
-    return authors.map((author) => plainToClass(authorDto, author));
+    const authors = await this.authorsRepository.find({ relations: ['books'] });
+    return authors.map(author => plainToClass(authorDto, author));
   }
 
   async getAuthorByID(id: number) {
-    const author = await this.authorsRepository.findOne({ where: { id: id } });
+    const author = await this.authorsRepository.findOne({
+      where: { id },
+      relations: ['books']
+    });
     if (author) {
       return plainToClass(authorDto, author);
     }
@@ -44,15 +44,15 @@ export class AuthorService {
 
     await this.authorsRepository.save(author);
 
-    const authEntity = this.authorsRepository.findOne({
+    const updatedAuthor = await this.authorsRepository.findOne({
       where: { id },
       relations: ['books'],
     });
-    return plainToClass(authorDto, authEntity);
+    return plainToClass(authorDto, updatedAuthor);
   }
 
-  async createAuthor(author: createAuthorDto) {
-    const newAuthor = this.authorsRepository.create(author);
+  async createAuthor(authorData: createAuthorDto) {
+    const newAuthor = this.authorsRepository.create(authorData);
     await this.authorsRepository.save(newAuthor);
     return plainToClass(authorDto, newAuthor);
   }

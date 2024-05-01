@@ -18,6 +18,7 @@ import { GenreService } from './genre.service';
 import { createGenreDto } from './dto/create-genre.dto';
 import { updateGenreDto } from './dto/update-genre.dto';
 import Genre from './genre.entity';
+import {genreDto} from "./dto/genre.dto";
 
 @Controller('genre')
 @ApiTags('Genre')
@@ -36,7 +37,7 @@ export class GenreController {
   @ApiResponse({
     status: 200,
     description: 'List of all genres',
-    type: [Genre],
+    type: [genreDto],
   })
   getAllGenres() {
     return this.genreService.getAllGenres();
@@ -44,7 +45,7 @@ export class GenreController {
 
   @Get('/:id')
   @ApiOperation({ summary: 'Retrieve a genre by ID' })
-  @ApiResponse({ status: 200, description: 'Genre details', type: Genre })
+  @ApiResponse({ status: 200, description: 'Genre details', type: genreDto })
   @ApiParam({
     name: 'id',
     required: true,
@@ -61,7 +62,7 @@ export class GenreController {
   @ApiResponse({
     status: 201,
     description: 'Genre created successfully',
-    type: Genre,
+    type: genreDto,
   })
   async createGenre(@Body() post: createGenreDto) {
     return this.genreService.createGenre(post);
@@ -82,7 +83,7 @@ export class GenreController {
   @ApiResponse({
     status: 200,
     description: 'Genre updated successfully',
-    type: Genre,
+    type: genreDto,
   })
   async updateGenre(@Body() post: updateGenreDto, @Param('id') id: string) {
     return this.genreService.updateGenre(Number(id), post);
