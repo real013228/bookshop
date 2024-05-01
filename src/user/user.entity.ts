@@ -6,11 +6,14 @@ class User {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
-  public firstName: string;
+  @Column({ unique: true })
+  public email: string;
 
   @Column()
-  public secondName: string;
+  public name: string;
+
+  @Column()
+  public password: string;
 
   @OneToMany(() => Order, (order) => order.user)
   public orders: Order[];

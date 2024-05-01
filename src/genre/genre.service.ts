@@ -4,6 +4,8 @@ import { createGenreDto } from './dto/create-genre.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Genre from './genre.entity';
+import {plainToClass} from "class-transformer";
+import {genreDto} from "./dto/genre.dto";
 
 @Injectable()
 export class GenreService {
@@ -15,38 +17,39 @@ export class GenreService {
     private genresRepository: Repository<Genre>,
   ) {}
 
-  getAllGenres() {
-    return this.genresRepository.find();
+  async getAllGenres() {
+    const genres = await this.genresRepository.find();
+    return genres.map((genre) => plainToClass(genreDto, genre));
   }
 
   async getGenreByID(id: number) {
     const genre = await this.genresRepository.findOne({ where: { id: id } });
     if (genre) {
-      return genre;
+      return plainToClass(genreDto, genre);
     }
     throw new HttpException('Genre not found', HttpStatus.NOT_FOUND);
   }
 
-  async updateGenre(id: number, genreDto: updateGenreDto) {
+  async updateGenre(id: number, genreDTO: updateGenreDto) {
     const genre = await this.genresRepository.findOneBy({ id });
     if (!genre) {
       throw new HttpException('Genre not found', HttpStatus.NOT_FOUND);
     }
 
-    if (genreDto.name) {
-      genre.name = genreDto.name;
+    if (genreDTO.name) {
+      genre.name = genreDTO.name;
     }
 
     await this.genresRepository.save(genre);
-    return genre;
+    return plainToClass(genreDto, genre);
   }
 
-  async createGenre(genreDto: createGenreDto) {
+  async createGenre(genreDTO: createGenreDto) {
     const genre = new Genre();
-    genre.name = genreDto.name;
+    genre.name = genreDTO.name;
 
     await this.genresRepository.save(genre);
-    return genre;
+    return plainToClass(genreDto, genre);
   }
 
   async deleteGenre(id: number) {

@@ -6,6 +6,8 @@ import { In, Repository } from 'typeorm';
 import Order from './order.entity';
 import Book from '../book/book.entity';
 import User from '../user/user.entity';
+import {plainToClass} from "class-transformer";
+import {orderDto} from "./dto/order.dto";
 
 @Injectable()
 export class OrderService {
@@ -28,18 +30,18 @@ export class OrderService {
   async getOrderByID(id: number) {
     const order = await this.ordersRepository.findOne({ where: { id: id } });
     if (order) {
-      return order;
+      return plainToClass(orderDto, order);
     }
     throw new HttpException('Order not found', HttpStatus.NOT_FOUND);
   }
 
-  async createOrder(orderDto: createOrderDto): Promise<Order> {
-    const user = await this.usersRepository.findOneBy({ id: orderDto.userID });
+  async createOrder(orderDTO: createOrderDto) {
+    const user = await this.usersRepository.findOneBy({ id: orderDTO.userId });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    if (!orderDto.booksID || orderDto.booksID.length === 0) {
+    if (!orderDTO.bookIds || orderDTO.bookIds.length === 0) {
       throw new HttpException(
         'Books list cannot be empty',
         HttpStatus.BAD_REQUEST,
@@ -47,9 +49,9 @@ export class OrderService {
     }
 
     const books = await this.booksRepository.findBy({
-      id: In(orderDto.booksID),
+      id: In(orderDTO.bookIds),
     });
-    if (books.length !== orderDto.booksID.length) {
+    if (books.length !== orderDTO.bookIds.length) {
       throw new HttpException(
         'One or more books not found',
         HttpStatus.BAD_REQUEST,
@@ -62,10 +64,10 @@ export class OrderService {
     order.books = books;
     order.totalPrice = totalPrice;
     await this.ordersRepository.save(order);
-    return order;
+    return plainToClass(orderDto, order);
   }
 
-  async updateOrder(orderId: number, orderDto: updateOrderDto): Promise<Order> {
+  async updateOrder(orderId: number, orderDTO: updateOrderDto) {
     const order = await this.ordersRepository.findOne({
       where: { id: orderId },
       relations: ['books'],
@@ -74,24 +76,24 @@ export class OrderService {
       throw new HttpException('Order not found', HttpStatus.NOT_FOUND);
     }
 
-    if (orderDto.books && orderDto.books.length > 0) {
+    if (orderDTO.bookIds && orderDTO.bookIds.length > 0) {
       const books = await this.booksRepository.findBy({
-        id: In(orderDto.books),
+        id: In(orderDTO.bookIds),
       });
-      if (books.length !== orderDto.books.length) {
+      if (books.length !== orderDTO.bookIds.length) {
         throw new HttpException(
           'One or more books not found',
           HttpStatus.BAD_REQUEST,
         );
       }
       order.books = books;
-    } else if (orderDto.books && orderDto.books.length === 0) {
+    } else if (orderDTO.bookIds && orderDTO.bookIds.length === 0) {
       order.books = [];
     }
 
     order.totalPrice = order.books.reduce((sum, book) => sum + book.price, 0);
     await this.ordersRepository.save(order);
-    return order;
+    return plainToClass(orderDto, order);
   }
 
   async deleteOrder(id: number) {

@@ -6,6 +6,8 @@ import { In, Repository } from 'typeorm';
 import Book from './book.entity';
 import Genre from '../genre/genre.entity';
 import Author from '../author/author.entity';
+import { plainToClass } from 'class-transformer';
+import { bookDto } from './dto/book.dto';
 
 @Injectable()
 export class BookService {
@@ -21,19 +23,20 @@ export class BookService {
     private authorRepository: Repository<Author>,
   ) {}
 
-  getAllBooks() {
-    return this.booksRepository.find();
+  async getAllBooks() {
+    const books = await this.booksRepository.find();
+    return books.map((book) => plainToClass(bookDto, book));
   }
 
   async getBookByID(id: number) {
     const book = await this.booksRepository.findOne({ where: { id: id } });
     if (book) {
-      return book;
+      return plainToClass(bookDto, book);
     }
     throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
   }
 
-  async updateBook(id: number, bookDto: updateBookDto) {
+  async updateBook(id: number, bookDTO: updateBookDto) {
     const book = await this.booksRepository.findOne({
       where: { id },
       relations: ['genres'],
@@ -43,16 +46,16 @@ export class BookService {
       throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
 
-    book.title = bookDto.title || book.title;
-    book.description = bookDto.description || book.description;
-    book.price = bookDto.price !== null ? bookDto.price : book.price;
+    book.title = bookDTO.title || book.title;
+    book.description = bookDTO.description || book.description;
+    book.price = bookDTO.price !== null ? bookDTO.price : book.price;
 
-    if (bookDto.genres && bookDto.genres.length > 0) {
+    if (bookDTO.genres && bookDTO.genres.length > 0) {
       const genres = await this.genreRepository.findBy({
-        id: In(bookDto.genres),
+        id: In(bookDTO.genres),
       });
 
-      if (genres.length !== bookDto.genres.length) {
+      if (genres.length !== bookDTO.genres.length) {
         throw new HttpException(
           'Some genres not found',
           HttpStatus.BAD_REQUEST,
@@ -63,23 +66,23 @@ export class BookService {
     }
 
     await this.booksRepository.save(book);
-    return book;
+    return plainToClass(bookDto, book);
   }
 
-  async createBook(bookDto: createBookDto) {
+  async createBook(bookDTO: createBookDto) {
     const author = await this.authorRepository.findOne({
-      where: { id: bookDto.authorID },
+      where: { id: bookDTO.authorId },
     });
     if (!author) {
       throw new HttpException('Author not found', HttpStatus.BAD_REQUEST);
     }
 
     let genres: Genre[] = [];
-    if (bookDto.genresID && bookDto.genresID.length > 0) {
+    if (bookDTO.genres && bookDTO.genres.length > 0) {
       genres = await this.genreRepository.findBy({
-        id: In(bookDto.genresID),
+        id: In(bookDTO.genres),
       });
-      if (genres.length !== bookDto.genresID.length) {
+      if (genres.length !== bookDTO.genres.length) {
         throw new HttpException(
           'One or more genres not found',
           HttpStatus.BAD_REQUEST,
@@ -88,14 +91,14 @@ export class BookService {
     }
 
     const newBook = new Book();
-    newBook.title = bookDto.title;
-    newBook.description = bookDto.description ?? '';
+    newBook.title = bookDTO.title;
+    newBook.description = bookDTO.description ?? '';
     newBook.author = author;
-    newBook.price = bookDto.price;
+    newBook.price = bookDTO.price;
     newBook.genres = genres;
 
     await this.booksRepository.save(newBook);
-    return newBook;
+    return plainToClass(bookDto, newBook);
   }
 
   async deleteBook(id: number) {

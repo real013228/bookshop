@@ -4,6 +4,8 @@ import { createAuthorDto } from './dto/create-author.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Author from './author.entity';
+import { plainToClass } from 'class-transformer';
+import { authorDto } from './dto/author.dto';
 
 @Injectable()
 export class AuthorService {
@@ -15,19 +17,20 @@ export class AuthorService {
     private authorsRepository: Repository<Author>,
   ) {}
 
-  getAllAuthors() {
-    return this.authorsRepository.find();
+  async getAllAuthors() {
+    const authors = await this.authorsRepository.find();
+    return authors.map((author) => plainToClass(authorDto, author));
   }
 
   async getAuthorByID(id: number) {
     const author = await this.authorsRepository.findOne({ where: { id: id } });
     if (author) {
-      return author;
+      return plainToClass(authorDto, author);
     }
     throw new HttpException('Author not found', HttpStatus.NOT_FOUND);
   }
 
-  async updateAuthor(id: number, authorDto: updateAuthorDto) {
+  async updateAuthor(id: number, authDto: updateAuthorDto) {
     const author = await this.authorsRepository.findOne({
       where: { id },
       relations: ['books'],
@@ -36,21 +39,22 @@ export class AuthorService {
       throw new HttpException('Author not found', HttpStatus.NOT_FOUND);
     }
 
-    author.firstName = authorDto.firstName || author.firstName;
-    author.secondName = authorDto.secondName || author.secondName;
+    author.firstName = authDto.firstName || author.firstName;
+    author.secondName = authDto.secondName || author.secondName;
 
-    await this.authorsRepository.save(author); // Save changes in the transaction
+    await this.authorsRepository.save(author);
 
-    return this.authorsRepository.findOne({
+    const authEntity = this.authorsRepository.findOne({
       where: { id },
       relations: ['books'],
     });
+    return plainToClass(authorDto, authEntity);
   }
 
   async createAuthor(author: createAuthorDto) {
     const newAuthor = this.authorsRepository.create(author);
     await this.authorsRepository.save(newAuthor);
-    return newAuthor;
+    return plainToClass(authorDto, newAuthor);
   }
 
   async deleteAuthor(id: number) {
