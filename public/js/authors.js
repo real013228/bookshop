@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const apiUrl = `http://localhost:8080/Author`;
-
   function fetchAuthors() {
     document.getElementById('preloader').style.display = 'block';
-    fetch(apiUrl, {
+    fetch('Author', {
       method: 'GET',
     })
       .then((response) => {

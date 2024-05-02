@@ -2,9 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function fetchData() {
     document.getElementById('preloader').style.display = 'block';
 
-    const apiUrl = `http://localhost:8080/User`;
-
-    fetch(apiUrl, {
+    fetch('User', {
       method: 'GET',
     })
       .then((response) => {
