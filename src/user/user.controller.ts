@@ -6,18 +6,21 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
 import { userDto } from './dto/user.dto';
+import { PaginationDto } from '../pagination.dto';
 
 @Controller('User')
 @ApiTags('User')
@@ -25,14 +28,30 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Retrieve all users' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of items per page',
+  })
   @ApiResponse({
     status: 200,
     description: 'List of all users',
     type: [userDto],
   })
   @Get()
-  async getAllUsers() {
-    const users = await this.userService.getAllUsers();
+  async getAllUsers(@Query() paginationDto: PaginationDto) {
+    const { page, limit } = paginationDto;
+    const users = await this.userService.getAllUsers({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
     return users;
   }
 

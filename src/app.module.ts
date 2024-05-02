@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database.module';
 import { AppController } from './app.controller';
@@ -10,10 +15,15 @@ import { BookModule } from './book/book.module';
 import { OrderModule } from './order/order.module';
 import { GenreModule } from './genre/genre.module';
 import { AuthorModule } from './author/author.module';
+import { FirebaseApp } from './auth/firebase-app';
+import { AuthStrategy } from './auth/auth.strategy';
+import { PreAuthMiddleware } from './auth/pre-auth.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    AuthModule,
     DatabaseModule,
     UserModule,
     BookModule,
@@ -28,6 +38,15 @@ import { AuthorModule } from './author/author.module';
       provide: APP_INTERCEPTOR,
       useClass: TimingInterceptor,
     },
+    FirebaseApp,
+    AuthStrategy,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(PreAuthMiddleware).forRoutes({
+      path: '/secure/*',
+      method: RequestMethod.ALL,
+    });
+  }
+}

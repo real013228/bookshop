@@ -6,6 +6,7 @@ import {
   Put,
   Delete,
   Body,
+  Query,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import {
@@ -14,11 +15,13 @@ import {
   ApiResponse,
   ApiBody,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { createBookDto } from './dto/create-book.dto';
 import { updateBookDto } from './dto/update-book.dto';
 
 import { bookDto } from './dto/book.dto';
+import { PaginationDto } from '../pagination.dto';
 
 @Controller('Book')
 @ApiTags('Book')
@@ -32,10 +35,25 @@ export class BookController {
     description: 'List of all books',
     type: [bookDto],
   })
-  getAllBooks() {
-    return this.bookService.getAllBooks();
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of items per page',
+  })
+  getAllBooks(@Query() paginationDto: PaginationDto) {
+    const { page, limit } = paginationDto;
+    return this.bookService.getAllBooks({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
   }
-
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a book by ID' })
   @ApiResponse({ status: 200, description: 'Book details', type: bookDto })

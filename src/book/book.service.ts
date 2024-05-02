@@ -20,9 +20,11 @@ export class BookService {
     private authorRepository: Repository<Author>,
   ) {}
 
-  async getAllBooks() {
+  async getAllBooks(pagination: { skip: number; take: number }) {
     const books = await this.booksRepository.find({
       relations: ['author', 'genres'],
+      skip: pagination.skip,
+      take: pagination.take,
     });
     return books.map((book) => plainToClass(bookDto, book));
   }

@@ -14,11 +14,14 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async getAllUsers() {
-    const users = await this.usersRepository.find({ relations: ['orders'] });
+  async getAllUsers(pagination: { skip: number; take: number }) {
+    const users = await this.usersRepository.find({
+      skip: pagination.skip,
+      take: pagination.take,
+      relations: ['orders'],
+    });
     return users.map((user) => plainToClass(userDto, user));
   }
-
   async getUserByID(id: number) {
     const user = await this.usersRepository.findOne({
       where: { id },
