@@ -11,11 +11,13 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { registerDto } from './dto/register.dto';
 import firebase from 'firebase';
+import {UserService} from "../user/user.service";
 
 @ApiTags('Auth')
 @Controller('Auth')
 export class AuthController {
   app: firebase.app.App;
+  constructor(private readonly userService: UserService) {}
   signed_in = false;
   user_email: string;
   @Post('/login')
@@ -53,6 +55,11 @@ export class AuthController {
           authCredentialsDto.email,
           authCredentialsDto.password,
         );
+      await this.userService.createUser({
+        email: authCredentialsDto.email,
+        name: 'empty name',
+        password: authCredentialsDto.password,
+      });
       return res.redirect('back');
     } catch (e) {
       console.error('Failed to register', e);

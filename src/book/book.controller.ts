@@ -7,6 +7,7 @@ import {
   Delete,
   Body,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import {
@@ -22,6 +23,7 @@ import { updateBookDto } from './dto/update-book.dto';
 
 import { bookDto } from './dto/book.dto';
 import { PaginationDto } from '../pagination.dto';
+import { RolesGuard } from '../role/roles.guard';
 
 @Controller('Book')
 @ApiTags('Book')
@@ -75,6 +77,7 @@ export class BookController {
     description: 'Book created successfully',
     type: bookDto,
   })
+  @UseGuards(new RolesGuard(['admin']))
   async createBook(@Body() post: createBookDto) {
     return this.bookService.createBook(post);
   }
