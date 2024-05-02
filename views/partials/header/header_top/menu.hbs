@@ -1,13 +1,13 @@
 <nav class="menu">
     <ul class="menu__list">
         <li class="menu__list-item">
-            <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Home</a>
+            <a class="menu__link" href="../../books.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Books</a>
         </li>
         <li class="menu__list-item">
-            <a class="menu__link" href="#" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">More</a>
+            <a class="menu__link" href="../../authors.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Authors</a>
         </li>
         <li class="menu__list-item">
-            <a class="menu__link" href="fetch.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Contacts</a>
+            <a class="menu__link" href="../../fetch.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Contacts</a>
         </li>
         {{#unless logged}}
             <li class="menu__list-item">

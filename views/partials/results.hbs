@@ -10,18 +10,27 @@
 </head>
 <body>
 
-    <div class="header">
-        <h1 class="header__title">Результаты поиска</h1>
-    </div>
-    
-    <div id="bookContainer"></div>
-    <script>
-        const searchTerm = localStorage.getItem('searchTerm');
-        const filteredBooks = filterBooksByTitle(titles, searchTerm);
-        renderBooks(filteredBooks);
-    </script>
-    <footer>
-        <p class="footer__page-loadtime">Время загрузки страницы: {{responseTime}} мс + </p>
-    </footer>
+<div class="header">
+    <h1 class="header__title">Результаты поиска</h1>
+</div>
+
+<div id="bookContainer"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchTerm = localStorage.getItem('searchTerm') || '';
+
+        fetchBooks().then(books => {
+            if (books) {
+                const filteredBooks = filterBooksByTitle(books, searchTerm);
+                renderBooks(filteredBooks);
+            } else {
+                console.error('No books received from the server');
+            }
+        });
+    });
+</script>
+<footer>
+    <p class="footer__page-loadtime">Время загрузки страницы: {{responseTime}} мс + </p>
+</footer>
 </body>
 </html>

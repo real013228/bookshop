@@ -21,7 +21,7 @@ import Order from './order.entity';
 import {orderDto} from "./dto/order.dto";
 
 @ApiTags('Order')
-@Controller('order')
+@Controller('Order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 

@@ -21,7 +21,7 @@ import Author from './author.entity';
 import {authorDto} from "./dto/author.dto";
 
 @ApiTags('Author')
-@Controller('author')
+@Controller('Author')
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 

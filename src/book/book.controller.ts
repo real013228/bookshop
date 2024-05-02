@@ -20,7 +20,7 @@ import { updateBookDto } from './dto/update-book.dto';
 
 import { bookDto } from './dto/book.dto';
 
-@Controller('book')
+@Controller('Book')
 @ApiTags('Book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}

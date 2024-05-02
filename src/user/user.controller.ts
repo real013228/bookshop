@@ -1,30 +1,28 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
   Put,
-  Delete,
-  Body,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
-  ApiParam,
 } from '@nestjs/swagger';
 import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
-import UserEntity from './user.entity';
-import {userDto} from "./dto/user.dto";
+import { userDto } from './dto/user.dto';
 
 @Controller('User')
 @ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
 
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({
@@ -32,9 +30,10 @@ export class UserController {
     description: 'List of all users',
     type: [userDto],
   })
-  @Get('/user')
-  getAllUsers() {
-    return this.userService.getAllUsers();
+  @Get()
+  async getAllUsers() {
+    const users = await this.userService.getAllUsers();
+    return users;
   }
 
   @ApiOperation({ summary: 'Retrieve a user by ID' })
@@ -48,7 +47,7 @@ export class UserController {
     description: 'The ID of the user to retrieve',
     type: 'string',
   })
-  @Get('/user/:id')
+  @Get('/:id')
   getUserByID(@Param('id') id: string) {
     return this.userService.getUserByID(Number(id));
   }
@@ -59,7 +58,7 @@ export class UserController {
     description: 'The data needed to create a new user',
   })
   @ApiResponse({ status: 201, description: 'User created', type: userDto })
-  @Post('/user')
+  @Post()
   async createUser(@Body() post: createUserDto) {
     return this.userService.createUser(post);
   }
@@ -75,7 +74,7 @@ export class UserController {
     description: 'The data needed to update the user',
   })
   @ApiResponse({ status: 200, description: 'User updated', type: userDto })
-  @Put('/user/:id')
+  @Put('/:id')
   async updateUser(@Body() post: updateUserDto, @Param('id') id: string) {
     return this.userService.updateUser(Number(id), post);
   }
@@ -87,7 +86,7 @@ export class UserController {
     description: 'The ID of the user to delete',
     type: 'string',
   })
-  @Delete('/user/:id')
+  @Delete('/:id')
   async deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(Number(id));
   }

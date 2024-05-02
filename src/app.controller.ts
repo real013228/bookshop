@@ -39,4 +39,14 @@ export class AppController {
   getWebform() {
     return;
   }
+  @Get('authors.hbs')
+  @Render('partials/authors.hbs')
+  getAuthors() {
+    return;
+  }
+  @Get('books.hbs')
+  @Render('partials/books.hbs')
+  getBooks() {
+    return;
+  }
 }

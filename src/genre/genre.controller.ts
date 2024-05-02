@@ -20,7 +20,7 @@ import { updateGenreDto } from './dto/update-genre.dto';
 import Genre from './genre.entity';
 import {genreDto} from "./dto/genre.dto";
 
-@Controller('genre')
+@Controller('Genre')
 @ApiTags('Genre')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
