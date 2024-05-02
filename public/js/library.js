@@ -14,7 +14,9 @@ const titles = [
 ];
 
 function fetchBooks() {
-  return fetch('http://localhost:8080/Book')
+  return fetch('Book', {
+    method: 'GET',
+  })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error, status = ${response.status}`);
