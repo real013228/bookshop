@@ -27,6 +27,15 @@ export class OrderService {
     return orders.map((order) => plainToClass(orderDto, order));
   }
 
+  async findAllOrdersByUserEmail(email: string) {
+    return await this.ordersRepository.find({
+      where: {
+        user: { email: email },
+      },
+      relations: ['books'] // Include 'books' to load the associated books
+    });
+  }
+
   async getOrderByID(id: number) {
     const order = await this.ordersRepository.findOne({
       where: { id },

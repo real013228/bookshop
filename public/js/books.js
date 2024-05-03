@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
         renderError(error.message);
       });
   }
-  window.location.href = 'results.hbs';
   function filterBooksByTitle(bookList, searchTerm) {
     return bookList.filter((book) =>
       book.title.toLowerCase().includes(searchTerm.toLowerCase()),

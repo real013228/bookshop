@@ -6,6 +6,8 @@ import {
   Put,
   Delete,
   Body,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,8 +19,7 @@ import {
 import { OrderService } from './order.service';
 import { createOrderDto } from './dto/create-order.dto';
 import { updateOrderDto } from './dto/update-order.dto';
-import Order from './order.entity';
-import {orderDto} from "./dto/order.dto";
+import { orderDto } from './dto/order.dto';
 
 @ApiTags('Order')
 @Controller('Order')
@@ -49,6 +50,32 @@ export class OrderController {
     return this.orderService.getOrderByID(Number(id));
   }
 
+  @Get('user/:email')
+  @ApiOperation({ summary: 'Retrieve all orders for a specific user' })
+  @ApiParam({
+    name: 'email',
+    description: 'Unique email for the user whose orders are being requested',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'A list of orders',
+    type: [orderDto],
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No orders found for this user',
+  })
+  async getAllOrdersByUser(@Param('email') email: string) {
+    const orders = await this.orderService.findAllOrdersByUserEmail(email);
+    if (!orders.length) {
+      throw new HttpException(
+        'No orders found for this user',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return orders;
+  }
   @Post()
   @ApiOperation({ summary: 'Create a new order' })
   @ApiBody({

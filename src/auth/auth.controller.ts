@@ -34,7 +34,7 @@ export class AuthController {
           authCredentialsDto.password,
         );
       const idToken = await user.user?.getIdToken();
-      res.cookie('access_token', idToken, { httpOnly: true });
+      res.cookie('access_token', idToken);
       return res.redirect('back');
     } catch (e) {
       console.error('Failed to sign in', e);

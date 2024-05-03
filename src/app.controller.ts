@@ -60,4 +60,9 @@ export class AppController {
   getBooks() {
     return { signed_in: this.signed_in, user_email: this.user_email };
   }
+  @Get('orders.hbs')
+  @Render('partials/orders.hbs')
+  getOrders() {
+    return { signed_in: this.signed_in, user_email: this.user_email };
+  }
 }
