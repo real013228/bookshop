@@ -5,7 +5,7 @@ import {
   Post,
   Put,
   Delete,
-  Body,
+  Body, UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -19,6 +19,7 @@ import { createGenreDto } from './dto/create-genre.dto';
 import { updateGenreDto } from './dto/update-genre.dto';
 import Genre from './genre.entity';
 import {genreDto} from "./dto/genre.dto";
+import {RolesGuard} from "../role/roles.guard";
 
 @Controller('Genre')
 @ApiTags('Genre')
@@ -64,6 +65,7 @@ export class GenreController {
     description: 'Genre created successfully',
     type: genreDto,
   })
+  @UseGuards(new RolesGuard(['admin']))
   async createGenre(@Body() post: createGenreDto) {
     return this.genreService.createGenre(post);
   }
@@ -85,6 +87,7 @@ export class GenreController {
     description: 'Genre updated successfully',
     type: genreDto,
   })
+  @UseGuards(new RolesGuard(['admin']))
   async updateGenre(@Body() post: updateGenreDto, @Param('id') id: string) {
     return this.genreService.updateGenre(Number(id), post);
   }
@@ -97,6 +100,7 @@ export class GenreController {
     description: 'ID of the genre to delete',
     type: 'integer',
   })
+  @UseGuards(new RolesGuard(['admin']))
   @ApiResponse({ status: 204, description: 'Genre deleted successfully' })
   async deleteGenre(@Param('id') id: string) {
     return this.genreService.deleteGenre(Number(id));

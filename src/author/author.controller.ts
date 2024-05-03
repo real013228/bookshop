@@ -5,7 +5,7 @@ import {
   Post,
   Put,
   Delete,
-  Body,
+  Body, UseGuards,
 } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import {
@@ -19,6 +19,7 @@ import { createAuthorDto } from './dto/create-author.dto';
 import { updateAuthorDto } from './dto/update-author.dto';
 import Author from './author.entity';
 import {authorDto} from "./dto/author.dto";
+import {RolesGuard} from "../role/roles.guard";
 
 @ApiTags('Author')
 @Controller('Author')
@@ -64,6 +65,7 @@ export class AuthorController {
     description: 'Author created successfully',
     type: authorDto,
   })
+  @UseGuards(new RolesGuard(['admin']))
   async createAuthor(@Body() post: createAuthorDto) {
     return this.authorService.createAuthor(post);
   }
@@ -85,6 +87,7 @@ export class AuthorController {
     description: 'Author updated successfully',
     type: authorDto,
   })
+  @UseGuards(new RolesGuard(['admin']))
   async updateAuthor(@Body() post: updateAuthorDto, @Param('id') id: string) {
     return this.authorService.updateAuthor(Number(id), post);
   }
@@ -101,6 +104,7 @@ export class AuthorController {
     status: 204,
     description: 'Author deleted successfully',
   })
+  @UseGuards(new RolesGuard(['admin']))
   async deleteAuthor(@Param('id') id: string) {
     return this.authorService.deleteAuthor(Number(id));
   }

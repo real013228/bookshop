@@ -32,7 +32,7 @@ export class OrderService {
       where: {
         user: { email: email },
       },
-      relations: ['books'] // Include 'books' to load the associated books
+      relations: ['books'], // Include 'books' to load the associated books
     });
   }
 
@@ -48,7 +48,10 @@ export class OrderService {
   }
 
   async createOrder(orderDTO: createOrderDto) {
-    const user = await this.usersRepository.findOneBy({ id: orderDTO.userId });
+    const user = await this.usersRepository.findOneBy({
+      email: orderDTO.userId,
+    });
+    console.log(user);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }

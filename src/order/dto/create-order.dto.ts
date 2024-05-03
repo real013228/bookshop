@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNumber, ArrayNotEmpty, IsNotEmpty } from 'class-validator';
+import {IsArray, IsNumber, ArrayNotEmpty, IsNotEmpty, IsString} from 'class-validator';
 
 export class createOrderDto {
   @ApiProperty({
@@ -13,10 +13,10 @@ export class createOrderDto {
   public bookIds: number[];
 
   @ApiProperty({
-    description: 'ID of the user placing the order',
-    example: 1,
+    description: 'email of the user placing the order',
+    example: 'rere@mail.ru',
   })
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  public userId: number;
+  public userId: string;
 }

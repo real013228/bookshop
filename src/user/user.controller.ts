@@ -6,7 +6,7 @@ import {
   Param,
   Post,
   Put,
-  Query,
+  Query, UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -21,6 +21,7 @@ import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
 import { userDto } from './dto/user.dto';
 import { PaginationDto } from '../pagination.dto';
+import {RolesGuard} from "../role/roles.guard";
 
 @Controller('User')
 @ApiTags('User')
@@ -78,6 +79,7 @@ export class UserController {
   })
   @ApiResponse({ status: 201, description: 'User created', type: userDto })
   @Post()
+  @UseGuards(new RolesGuard(['admin']))
   async createUser(@Body() post: createUserDto) {
     return this.userService.createUser(post);
   }
@@ -94,6 +96,7 @@ export class UserController {
   })
   @ApiResponse({ status: 200, description: 'User updated', type: userDto })
   @Put('/:id')
+  @UseGuards(new RolesGuard(['admin']))
   async updateUser(@Body() post: updateUserDto, @Param('id') id: string) {
     return this.userService.updateUser(Number(id), post);
   }
@@ -106,6 +109,7 @@ export class UserController {
     type: 'string',
   })
   @Delete('/:id')
+  @UseGuards(new RolesGuard(['admin']))
   async deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(Number(id));
   }

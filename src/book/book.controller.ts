@@ -99,6 +99,7 @@ export class BookController {
     description: 'Book updated successfully',
     type: bookDto,
   })
+  @UseGuards(new RolesGuard(['admin']))
   async updateBook(@Body() post: updateBookDto, @Param('id') id: string) {
     return this.bookService.updateBook(Number(id), post);
   }
@@ -112,6 +113,7 @@ export class BookController {
     type: 'number',
   })
   @ApiResponse({ status: 204, description: 'Book deleted successfully' })
+  @UseGuards(new RolesGuard(['admin']))
   async deleteBook(@Param('id') id: string) {
     return this.bookService.deleteBook(Number(id));
   }

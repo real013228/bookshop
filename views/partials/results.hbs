@@ -15,6 +15,9 @@
 </div>
 
 <div id="bookContainer"></div>
+<div class="order-button-container">
+    <button id="createOrder" onclick="createOrder()">Создать заказ</button>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchTerm = localStorage.getItem('searchTerm') || '';
