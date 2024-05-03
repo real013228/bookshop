@@ -2,6 +2,8 @@ import { Controller, Get, Post, Render, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiExcludeController } from '@nestjs/swagger';
 import firebase from 'firebase';
+import { AuthController } from './auth/auth.controller';
+import {AuthService} from "./auth/auth.service";
 
 @ApiExcludeController()
 @Controller()
@@ -10,7 +12,10 @@ export class AppController {
   signed_in = false;
   user_email: string;
 
-  constructor(private readonly appService: AppService) {
+  constructor(
+    private readonly appService: AppService,
+    private readonly authService: AuthService,
+  ) {
     this.app = firebase.initializeApp({
       apiKey: process.env.API_KEY,
     });
@@ -20,8 +25,8 @@ export class AppController {
   @Render('index')
   root() {
     return {
-      signed_in: this.signed_in,
-      user_email: this.user_email,
+      signed_in: this.authService.signedIn,
+      user_email: this.authService.userEmail,
       message: true,
       logged: true,
       accountName: 'Alice',
@@ -30,12 +35,6 @@ export class AppController {
   @Get('fetch.hbs')
   @Render('partials/fetch.hbs')
   getFetch() {
-    return { signed_in: this.signed_in, user_email: this.user_email };
-  }
-
-  @Get('loginform.hbs')
-  @Render('partials/loginform.hbs')
-  getLoginform() {
     return { signed_in: this.signed_in, user_email: this.user_email };
   }
 
@@ -64,5 +63,15 @@ export class AppController {
   @Render('partials/orders.hbs')
   getOrders() {
     return { signed_in: this.signed_in, user_email: this.user_email };
+  }
+  @Get('registerform.hbs')
+  @Render('partials/registerform.hbs')
+  getRegisterform() {
+    return { signed_in: this.authService.signedIn, user_email: this.authService.userEmail };
+  }
+  @Get('loginform.hbs')
+  @Render('partials/loginform.hbs')
+  getLoginform() {
+    return { signed_in: this.authService.signedIn, user_email: this.authService.userEmail };
   }
 }

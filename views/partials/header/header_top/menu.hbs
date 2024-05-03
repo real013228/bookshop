@@ -1,21 +1,28 @@
 <nav class="menu">
     <ul class="menu__list">
         <li class="menu__list-item">
-            <a class="menu__link" href="../../books.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Books</a>
-        </li>
-        <li class="menu__list-item">
             <a class="menu__link" href="../../authors.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Authors</a>
         </li>
         <li class="menu__list-item">
             <a class="menu__link" href="../../fetch.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Contacts</a>
         </li>
-        {{#unless logged}}
+
+        {{#unless signed_in}}
             <li class="menu__list-item">
-                <a class="menu__link" href="loginform.hbs" onclick="showRegistrationForm()" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Log in</a>
+                <a class="menu__link" href="../../registerform.hbs" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Sign up</a>
+            </li>
+        {{else}}
+            <li class="menu__list-item">
+                <a class="menu__link" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">WELCOME</a>
+            </li>
+        {{/unless}}
+        {{#unless signed_in}}
+            <li class="menu__list-item">
+                <a class="menu__link" href="loginform.hbs" onclick="showRegistrationForm()" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">Sign in</a>
             </li>
         {{else}} 
             <li class="menu__list-item">
-                <a class="menu__link" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">{{accountName}}</a>
+                <a class="menu__link" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">{{user_email}}</a>
             </li>
         {{/unless}}
         <li class="menu__list-item">

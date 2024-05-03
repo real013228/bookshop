@@ -19,6 +19,8 @@ import { FirebaseApp } from './auth/firebase-app';
 import { AuthStrategy } from './auth/auth.strategy';
 import { PreAuthMiddleware } from './auth/pre-auth.middleware';
 import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [

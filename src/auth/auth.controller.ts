@@ -4,22 +4,25 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Post,
+  Post, Render,
   Req,
   Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { registerDto } from './dto/register.dto';
 import firebase from 'firebase';
-import {UserService} from "../user/user.service";
+import { UserService } from '../user/user.service';
+import { AppController } from '../app.controller';
+import {AuthService} from "./auth.service";
 
 @ApiTags('Auth')
 @Controller('Auth')
 export class AuthController {
   app: firebase.app.App;
-  constructor(private readonly userService: UserService) {}
-  signed_in = false;
-  user_email: string;
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
   @Post('/login')
   async login(
     @Body() authCredentialsDto: registerDto,
@@ -35,6 +38,7 @@ export class AuthController {
         );
       const idToken = await user.user?.getIdToken();
       res.cookie('access_token', idToken);
+      this.authService.signIn(authCredentialsDto.email);
       return res.redirect('back');
     } catch (e) {
       console.error('Failed to sign in', e);
@@ -70,6 +74,7 @@ export class AuthController {
   @Post('/logout')
   async logout(@Req() req: Request, @Res() res) {
     res.clearCookie('access_token');
+    this.authService.signOut();
     return res.redirect('back');
   }
 
