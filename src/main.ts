@@ -33,7 +33,6 @@ async function bootstrap() {
     }),
   );
   // const firebaseConfig = {
-  //   apiKey: 'AIzaSyA1cCByjixpeU91H8GNwSu_KF0D3TZ7FaA',
   //   authDomain: 'bookshop-fi51.firebaseapp.com',
   //   projectId: 'bookshop-fi51',
   //   storageBucket: 'bookshop-fi51.appspot.com',
